@@ -1,0 +1,79 @@
+
+public class Robin_Karp_Algo {
+	static boolean found=false;
+	
+	static int hashValue(String s, int prime, int start, int end)
+	{
+		int hash=0;
+		for(int i=start; i<end; i++)  //calculating hash for string2
+			hash+=(int)s.charAt(i)*Math.pow(prime,i); 
+		 
+		return hash; 
+	}
+	
+	static int rehash(String s, int prime, int start, int end, int hash)
+	{
+		hash=hash-s.charAt(start);
+		hash=hash/prime;
+		hash+=(int)s.charAt(start+end-1)*Math.pow(prime, (end-1));
+		
+		return hash;
+	}
+	
+	
+	
+	private static void find(String pattern, String s) {
+		int prime=31;
+		int hash=0;
+		int p_len=pattern.length();
+		int s_len=s.length();
+		hash=hashValue(pattern, prime, 0, p_len);
+		System.out.println("hash:  "+hash);
+		int hash2=0;
+		for(int i=0; i<=(s_len-p_len); i++)
+		{
+			if(i==0)
+			{
+				hash2=hashValue(s, prime, i, p_len); 
+				System.out.println("hash2:  "+hash2);
+			}
+			else{
+				hash2=rehash(s, prime, i, p_len, hash2);
+				System.out.println("rehash: "+hash2);
+			}
+			 
+			if(hash2==hash)					//checking if both hash are equal or not
+			{
+				int count=0, j=0;
+				for(j=i; j<(i+p_len); j++)
+				{
+					if(s.charAt(j)!=pattern.charAt(count))
+							{break;}
+					count++;
+				} 
+				if(j==(i+p_len))
+				{
+					found=true;
+					System.out.println("match found at index: " + i);
+				}
+			}
+			
+			 
+		}
+		if(!found)
+			System.out.println("No match found for the string");
+		
+	}
+
+	
+
+	public static void main(String[] args) {
+		String s="berryblackberrymangoberry";
+		String pattern="berry";
+		find( pattern,  s);
+
+	}
+
+
+	
+}
